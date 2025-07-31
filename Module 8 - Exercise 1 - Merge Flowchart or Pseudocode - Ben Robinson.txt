@@ -1,0 +1,58 @@
+Start
+	Declarations
+		InputFile GeraldineLandscaping
+		InputFile GerardLandscape
+		OuputFile MergedFile
+		num GeraldineCustomerNumber
+		num GerardCustomerNumber
+		string GeraldineCustomerName
+		string GerardCustomerName
+		string GeraldineAddress
+		string GerardAddress
+		num GeraldineYard
+		num GerardYard
+		string End_Name = "ZZZ"
+		string areBothAtEnd = "N"
+	getReady()
+	while areBothAtEnd <> "Y"
+		mergeRecords ()
+	endwhile
+	finishUp()
+stop
+
+
+getReady()
+    Open GeraldineLandscaping
+    Open GerardLandscape
+    Open MergedFile for writing
+
+    Read GeraldineCustomerNumber, GeraldineCustomerName, GeraldineAddress, GeraldineYard from GeraldineLandscaping
+    Read GerardCustomerNumber, GerardCustomerName, GerardAddress, GerardYard from GerardLandscape
+
+
+mergeRecords()
+    IF GeraldineCustomerName = End_Name THEN
+        IF GerardCustomerName = End_Name THEN
+            areBothAtEnd = "Y"
+        ELSE
+            Write GerardCustomerNumber, GerardCustomerName, GerardAddress, GerardYard to MergedFile
+            Read next GerardCustomerNumber, GerardCustomerName, GerardAddress, GerardYard from GerardLandscape
+        ENDIF
+    ELSE IF GerardCustomerName = End_Name THEN
+        Write GeraldineCustomerNumber, GeraldineCustomerName, GeraldineAddress, GeraldineYard to MergedFile
+        Read next GeraldineCustomerNumber, GeraldineCustomerName, GeraldineAddress, GeraldineYard from GeraldineLandscaping
+    ELSE
+        IF GeraldineCustomerNumber < GerardCustomerNumber THEN
+            Write GeraldineCustomerNumber, GeraldineCustomerName, GeraldineAddress, GeraldineYard to MergedFile
+            Read next GeraldineCustomerNumber, GeraldineCustomerName, GeraldineAddress, GeraldineYard from GeraldineLandscaping
+        ELSE
+            Write GerardCustomerNumber, GerardCustomerName, GerardAddress, GerardYard to MergedFile
+            Read next GerardCustomerNumber, GerardCustomerName, GerardAddress, GerardYard from GerardLandscape
+        ENDIF
+    ENDIF
+
+
+finishUp()
+    Close GeraldineLandscaping
+    Close GerardLandscape
+    Close MergedFile
